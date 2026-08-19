@@ -1,0 +1,24 @@
+idea:
+  title: Fixed Points of AI Revision
+  domain: artificial_intelligence
+  hypothesis: 'If we iteratively feed a paper to an AI for review, then provide both
+    the review and the paper to the AI to make revisions, and repeat this process,
+    will the process converge to a fixed point where further iterations produce no
+    changes?
+
+    '
+  background:
+    description: 'Suppose we feed a paper to AI for reviewing, and then feed the review
+      and the paper to ask AI to make revisions, and repeat this process. Will we
+      ever reach a fixed point?
+
+      '
+  metadata:
+    author: Chenhao Tan
+    source: IdeaHub
+    source_url: https://hypogenic.ai/ideahub/idea/0mRpYvH2wxH1ZEUCeE2g
+    idea_id: fixed_points_of_ai_revision_20260819_212855_d3f11918
+    created_at: '2026-08-19T21:28:55.428184'
+    status: submitted
+    github_repo_name: fixed-points-of-ai-revision-a756
+    github_repo_url: https://github.com/Hypogenic-AI/fixed-points-of-ai-revision-a756
