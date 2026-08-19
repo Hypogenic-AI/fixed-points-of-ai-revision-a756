@@ -1,0 +1,7 @@
+# Exclude large/raw data files from git
+*
+# But keep documentation and small curated JSON seeds/samples
+!.gitignore
+!README.md
+!documents/
+!documents/*.json
