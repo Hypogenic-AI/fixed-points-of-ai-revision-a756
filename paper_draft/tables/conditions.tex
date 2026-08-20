@@ -1,0 +1,24 @@
+\begin{table}[t]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}llccllll@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Mode} & \textbf{Temp} & \textbf{Reviewer} & \textbf{Framing} & \textbf{Genre} & \textbf{Length} \\
+        \midrule
+        \texttt{D1\_main}            & two-stage    & 0.0 & \gptone (self) & structured & scientific & preserve \\
+        \texttt{D2\_single\_stage}   & \textbf{single-stage} & 0.0 & --- & --- & scientific & preserve \\
+        \texttt{D2\_temp\_default}   & two-stage    & \textbf{1.0} & \gptone & structured & scientific & preserve \\
+        \texttt{D2\_cross\_model}    & two-stage    & 0.0 & \textbf{\gpto} & structured & scientific & preserve \\
+        \texttt{D2\_framing\_harsh}  & two-stage    & 0.0 & \gptone & \textbf{harsh} & scientific & preserve \\
+        \texttt{D2\_framing\_lenient}& two-stage    & 0.0 & \gptone & \textbf{lenient} & scientific & preserve \\
+        \texttt{D2\_genre\_prose}    & two-stage    & 0.0 & \gptone & structured & \textbf{prose} & preserve \\
+        \texttt{D2\_unconstrained}   & two-stage    & 0.0 & \gptone & structured & scientific & \textbf{none} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{The eight experimental conditions: one direct test (\texttt{D1\_main}) plus seven
+    ablations. Bold entries mark each ablation's departure from \texttt{D1\_main}.
+    \texttt{D2\_single\_stage}---the single-stage \singlestage baseline on the same
+    documents---is the positive control for convergence.}
+    \label{tab:conditions}
+\end{table}

@@ -1,0 +1,43 @@
+\section{Related Work}
+\label{sec:related}
+
+\para{Iterative self-refinement.} A model can improve its own output by generating feedback
+and revising. Self-Refine~\citep{madaan2023selfrefine} is the canonical loop, fusing critique
+and revision in a single prompt; Reflexion~\citep{shinn2023reflexion} accumulates verbal
+self-feedback across attempts; and CRITIC~\citep{gou2023critic} critiques then corrects using
+\emph{external tools} for the signal. Our operator is a structured variant of this family,
+but we deliberately \emph{decouple} critique from revision into two separate calls and
+regenerate the review at every step, so the critique is a first-class object we can log,
+ablate, and hold responsible for the dynamics.
+
+\para{Recursive generation as a dynamical system.} \citet{wu2026converge} is the direct
+precedent: it frames recursive \emph{single-step} self-refinement as ``textual relaxation''
+toward a model-preferred soft fixed point, and defines the metrics we adopt---normalized
+Levenshtein transition magnitude, exact ($V_{t+1}=V_t$) and approximate
+($\dt<0.02$ and relative word-count change $<0.03$ for two consecutive steps) fixed points,
+and an exponential-relaxation fit $\dt \approx A e^{-kt}+c$. On ICML abstracts they report
+$100\%$ approximate convergence and near-perfect fidelity. We replicate this behavior with our
+single-stage baseline and show that it \emph{breaks} once an explicit review stage is
+inserted. Related framings cast self-correction as feedback control with stability
+thresholds~\citep{selfcontrol2026} and report independent evidence of ChatGPT
+self-convergence~\citep{xylogiannopoulos2026}, but none isolate a decoupled review loop.
+
+\para{Limits of self-correction.} A skeptical camp warns that recursion need not help.
+\citet{huang2023cannot} show LLMs often cannot self-correct reasoning without an external
+signal and can \emph{degrade} results. \citet{xu2024pride} show that iterative
+self-refinement can \emph{amplify} a model's own bias, inflating self-perceived quality while
+true quality stalls---which is precisely why we use a judge from a different model generation
+than the reviser. \citet{feedbackfriction2025} find that models resist fully incorporating
+even high-quality feedback, implying residual, non-converging edit pressure. Our results
+reconcile the two camps: the convergent relaxation of~\citet{wu2026converge} holds for the
+single-stage operator, while the skeptics' failure modes manifest precisely once an explicit
+critique loop is added.
+
+\para{Model collapse and self-consuming loops.} \citet{shumailov2023curse} and
+\citet{alemohammad2023selfconsuming} study what happens when generative models consume their
+own outputs, showing loss of diversity and quality (``model collapse,'' ``model autophagy
+disorder''). These results are framed for \emph{training} loops; our setting is
+\emph{inference-time} document revision, but the degenerate-attractor intuition transfers: we
+observe not variance collapse but its dual, unbounded expansion with semantic drift. Unlike
+this line of work, we do not fine-tune; we treat recursion as repeated inference and measure
+its fixed-point behavior directly.

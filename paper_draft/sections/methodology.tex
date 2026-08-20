@@ -1,0 +1,70 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{The operator and the fixed-point question}
+
+We treat a document version $V_t$ as the state of a discrete dynamical system. The two-stage
+operator applies the same model family in two separate calls:
+\begin{align}
+R_t     &= \Review(V_t)           &&\text{stage 1: critique the current version}, \\
+V_{t+1} &= \Revise(V_t, R_t)      &&\text{stage 2: rewrite given (version + review)},
+\end{align}
+so that $V_{t+1}=F(V_t)$ with $F=\Revise(\cdot,\Review(\cdot))$. We ask whether the trajectory
+$V_0, V_1, \dots$ reaches a fixed point. Two prompts implement the operator (full text in the
+released code): a \Review prompt (produce a 5--8 bullet critique; do \emph{not} rewrite) and a
+\Revise prompt (rewrite to address the review, preserve meaning/claims/scope, and ``keep
+roughly the same length''). For each seed document we run $T=8$ iterations, logging every
+$V_t$ and $R_t$.
+
+\subsection{Conditions}
+
+We test one direct condition (\texttt{D1\_main}) and seven ablations (\texttt{D2\_*}),
+summarized in \tabref{tab:conditions}. The pivotal contrast is \texttt{D2\_single\_stage}, a
+single-stage \singlestage baseline (revise directly, with no separate review) run on the same
+documents---our positive control for whether the harness can detect convergence at all. The
+remaining ablations vary decoding temperature ($0$ vs.\ $1.0$), the reviewer model
+(self vs.\ a cross-model reviewer), review framing (structured, harsh, lenient), genre
+(scientific abstract vs.\ general prose), and length guidance (preserve vs.\ none).
+
+\input{tables/conditions}
+
+\subsection{Models, data, and metrics}
+
+\para{Models.} The reviser/workhorse is \gptone; the independent cross-model reviewer and the
+LLM-judge are \gpto, a different model generation, honoring the ``judge $\neq$ reviser''
+caution against self-bias~\citep{xu2024pride}. Embeddings use \embedmodel. Decoding uses
+\texttt{max\_tokens}$=2048$, \texttt{seed}$=42$, and temperature as tabled.\footnote{The plan
+specified a Claude workhorse; only an \texttt{OPENAI\_API\_KEY} was available in this
+environment, and a loud-fail policy in the harness prevents silent mocking, so we ran the
+study on OpenAI models. The mechanism is model-general in principle;
+cross-provider replication is future work (\secref{sec:discussion}).}
+
+\para{Data.} We use 12 fresh arXiv abstracts spread across 6 categories for the scientific
+conditions and 10 Wikipedia introductions for the genre ablation. Using fresh 2025-era
+documents reduces training-data-contamination risk.
+
+\para{Metrics.} Mirroring and extending~\citet{wu2026converge}:
+\begin{itemize}[leftmargin=*,itemsep=1pt,topsep=1pt]
+    \item \textbf{Transition magnitude:} per-step normalized Levenshtein distance
+    $\dt = \mathrm{lev}(V_t,V_{t+1})/\max(|V_t|,|V_{t+1}|)$.
+    \item \textbf{Fixed points:} \emph{exact} ($V_{t+1}=V_t$); \emph{approximate}
+    ($\dt<0.02$ and relative word-count change $<0.03$ for two consecutive steps).
+    \item \textbf{Relaxation fit:} $\dt \approx A e^{-kt} + c$; we report the floor $c$ and
+    $R^2$.
+    \item \textbf{Semantic drift:} $\cos(\mathrm{emb}(V_0),\mathrm{emb}(V_t))$, and the
+    document length trajectory.
+    \item \textbf{Quality/fidelity:} an LLM-judge (\gpto) scores clarity, conciseness, and
+    technical precision (1--10) at $V_0$, $V_\text{mid}$, $V_\text{final}$, plus
+    meaning preservation and added/dropped-claim counts of $V_\text{final}$ vs.\ $V_0$.
+\end{itemize}
+
+\para{Truncation control.} Runaway length inflation (\secref{sec:mechanism}) pushes later
+versions past the $2048$-token cap. We flag a step as ``truncated'' if either endpoint was cut
+off (\texttt{finish\_reason==length}) and report a robustness metric---the minimum $\dt$ over
+\emph{truncation-free} steps only (``clean min $\Delta$'')---to show that non-convergence is
+not a truncation artifact.
+
+\para{Reproducibility.} All chat and embedding calls are disk-cached ($2076$ entries), so the
+full study re-runs at \$0 and is crash-resumable; a full re-analysis reported $1222$ cache
+hits at an estimated \$0.00. We release raw per-step trajectories, per-trajectory metrics,
+aggregates, and statistical tests.

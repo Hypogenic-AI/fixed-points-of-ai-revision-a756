@@ -1,0 +1,44 @@
+\begin{table}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{@{}lccc@{}}
+            \toprule
+            \textbf{Condition} & \textbf{$V_0$} & \textbf{$V_8$} & \textbf{growth} \\
+            \midrule
+            \texttt{D2\_single\_stage} & 1469 & 1519 & \textbf{1.03$\times$} \\
+            \texttt{D1\_main}          & 1469 & 9869 & 6.72$\times$ \\
+            \texttt{D2\_temp\_default} & 1469 & 9340 & 6.36$\times$ \\
+            \texttt{D2\_unconstrained} & 1469 & 10478 & 7.13$\times$ \\
+            \texttt{D2\_genre\_prose}  & 703  & 10380 & \textbf{14.8$\times$} \\
+            \bottomrule
+        \end{tabular}
+        }
+        \caption{Mean document length (characters), $V_0\to V_8$. The single-stage loop holds
+        length; every two-stage loop explodes it. Length-preserving \texttt{D1\_main} is
+        indistinguishable from unconstrained \texttt{D2\_unconstrained} ($p=0.62$): review
+        pressure overrides the length instruction.}
+        \label{tab:length}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{%
+        \begin{tabular}{@{}lcccc@{}}
+            \toprule
+            \textbf{Condition} & \textbf{$\cos(V_0,V_f)$} & \textbf{mean.\ /10} & \textbf{+cl.} & \textbf{--cl.} \\
+            \midrule
+            \texttt{D2\_single\_stage} & \textbf{0.973} & \textbf{10.0} & 0.0 & 0.0 \\
+            \texttt{D1\_main}          & 0.769 & 6.2 & 4.2 & 2.1 \\
+            \texttt{D2\_framing\_harsh}& 0.735 & 4.8 & 8.4 & 3.6 \\
+            \texttt{D2\_genre\_prose}  & 0.627 & 4.8 & 15.5 & 1.6 \\
+            \bottomrule
+        \end{tabular}
+        }
+        \caption{Fidelity of $V_\text{final}$ vs.\ $V_0$: cosine similarity, LLM-judged
+        meaning preservation (/10), and added/dropped claim counts (+cl.\ / --cl.). Inflation
+        breaks fidelity: two-stage loops drift and fabricate claims, while single-stage
+        preserves meaning perfectly.}
+        \label{tab:fidelity}
+    \end{minipage}
+\end{table}

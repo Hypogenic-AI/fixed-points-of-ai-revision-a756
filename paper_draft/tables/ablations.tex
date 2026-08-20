@@ -1,0 +1,22 @@
+\begin{table}[t]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lcccl@{}}
+        \toprule
+        \textbf{Ablation (vs.\ \texttt{D1\_main})} & \textbf{direction} & \textbf{effect (Cohen's $d_z$)} & \textbf{$p$} & \textbf{reading} \\
+        \midrule
+        single-stage vs.\ two-stage        & $\downarrow\downarrow\downarrow$ converges & $-2.56$ & $5\times10^{-4}$ & \textbf{the} decisive factor \\
+        temperature $1.0$ vs.\ $0$         & $\uparrow$ more churn / chaotic & $+2.09$ & $5\times10^{-4}$ & default temp destroys even relaxation ($R^2{=}0.27$) \\
+        cross-model reviewer vs.\ self     & $\downarrow$ less churn & $-1.17$ & $5\times10^{-3}$ & a different reviewer eases pressure, still no FP \\
+        lenient vs.\ structured framing    & $\downarrow$ less churn & $-1.14$ & $7\times10^{-3}$ & less to fix $\Rightarrow$ smaller edits, still no FP \\
+        harsh vs.\ structured framing      & $\uparrow$ (n.s.) & $+0.45$ & $0.13$ & trend toward more churn \\
+        unconstrained vs.\ length-preserving & $\uparrow$ (n.s.) & $+0.19$ & $0.62$ & length guidance barely helps \\
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Determinants of (non-)convergence: paired comparisons against \texttt{D1\_main}
+    (Wilcoxon on final $\Delta$). No manipulation produces convergence; the single- vs.\
+    two-stage contrast dominates every within-two-stage factor. Negative $d_z$ means less
+    churn than \texttt{D1\_main}. n.s.\ = not significant.}
+    \label{tab:ablations}
+\end{table}

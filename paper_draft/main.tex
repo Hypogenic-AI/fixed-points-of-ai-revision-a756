@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[final,main]{neurips_2025}  % NEURIPS style
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}  % clickable links
+\usepackage{booktabs}             % professional tables
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% Import command files
+\input{commands/math}
+\input{commands/general}
+\input{commands/macros}
+
+\captionsetup[table]{aboveskip=4pt,belowskip=4pt}
+\captionsetup[figure]{aboveskip=4pt,belowskip=4pt}
+
+\bibliographystyle{plainnat}
+
+\title{Fixed Points of AI Revision: An Explicit Review Stage Turns Convergent Self-Refinement into Non-Convergent Expansion}
+
+\author{Chenhao Tan and NeuriCo}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/methodology}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\bibliography{references}
+
+\end{document}

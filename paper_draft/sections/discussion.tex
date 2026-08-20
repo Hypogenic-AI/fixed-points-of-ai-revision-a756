@@ -1,0 +1,61 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{Answer to the hypothesis.} For the two-stage review$\to$revise loop the answer is a
+clear \emph{no}: it does not converge to a fixed point within a practical horizon; it enters a
+non-converging \emph{expansion regime}. The hypothesis \emph{is} essentially true for the
+single-stage variant---self-refine relaxes to a soft fixed point---which is the crucial
+contrast: the explicit, regenerated review is what prevents convergence, not iteration
+per se.
+
+\para{Why the review stage matters.} A ``make this better'' editor can declare a document
+locally optimal and stop editing ($\dt\to 0$). A ``peer reviewer'' role is adversarial by
+construction: it is prompted to \emph{find weaknesses}, and a capable model can always find
+some. Each critique is fresh edit pressure, and because the cheapest way to ``address'' most
+critiques is to add explanatory material, the operator $F$ behaves less like a contraction
+toward a fixed point and more like a \emph{growth map}. This reconciles the two camps in the
+literature: the convergent relaxation of~\citet{wu2026converge} holds for single-stage
+self-refine, while the skeptics' warnings---self-bias amplification~\citep{xu2024pride},
+feedback friction~\citep{feedbackfriction2025}, recursion-induced
+degradation~\citep{shumailov2023curse}---manifest precisely once an explicit critique loop is
+added. The effect sizes are large and consistent: the single- vs.\ two-stage contrast
+($d_z\approx-2.6$ to $-3.3$) dwarfs every within-two-stage manipulation.
+
+\para{A caution about isolated LLM-judges.} The most striking observation is that absolute
+quality scores rise slightly while meaning preservation falls sharply. This is a concrete
+demonstration that an LLM-judge scoring documents \emph{in isolation} is blind to fidelity
+drift---a caution for anyone using isolated LLM-judge scores as a convergence or quality
+signal. Fidelity must be measured relative to the source, not judged from the current version
+alone.
+
+\para{Limitations.}
+\begin{itemize}[leftmargin=*,itemsep=1pt,topsep=1pt]
+    \item \textbf{Model/provider scope.} We use one reviser family (\gptone) with \gpto as
+    cross-model reviewer and judge, due to key availability. The never-satisfied-reviewer
+    mechanism is model-general in principle, but the specific non-convergence should be
+    replicated on Claude, Gemini, and open-weight models before claiming universality.
+    \item \textbf{Output-length cap.} The $2048$-token cap truncates later two-stage steps
+    (mean $\sim 3$--$5$ of $8$ versions in the worst conditions). We mitigate with the
+    truncation-free clean min $\Delta$, which still rejects convergence ($0.34\gg 0.02$,
+    $p=5\times10^{-8}$); truncation is a \emph{downstream symptom} of inflation, not the cause
+    of non-convergence. A larger cap would give cleaner late-step curves.
+    \item \textbf{Horizon.} We cannot rule out convergence at much larger $T$, but the
+    \texttt{D1\_main} $\dt$ curve is flat/rising from step $\sim 3$ and length is still growing
+    at $V_8$, so there is no sign of approaching a fixed point.
+    \item \textbf{Sample size.} $12$ documents per condition ($10$ for prose) is adequate for
+    the very large primary effects (all $p<10^{-3}$) but modest for subtle ablation
+    differences (harsh vs.\ structured is not significant).
+    \item \textbf{Judge is an LLM.} Meaning preservation and quality are LLM-judged, not
+    human-annotated; we reduce self-bias by using a different generation than the reviser, but
+    human validation is future work.
+    \item \textbf{Prompt dependence.} Results are for one reasonable \Review/\Revise prompt
+    pair. A review prompt explicitly permitted to say ``no changes needed,'' or a reviser with
+    a hard length budget, might converge---a positive-control follow-up.
+\end{itemize}
+
+\para{Broader implications.} Iterative review$\to$revise pipelines are deployed under the
+implicit assumption that they stabilize at a polished document. Our results show the opposite:
+the loop supplies an endless stream of edit pressure and degrades meaning while its own quality
+signal reports success. Practitioners should not treat ``it stopped changing'' as an
+achievable end state for these loops, and should not trust an isolated quality judge to detect
+when to stop.

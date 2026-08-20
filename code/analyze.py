@@ -317,7 +317,7 @@ def make_figures(recs, summary):
     plt.figure(figsize=(9, 5))
     data = [[r["final_delta"] for r in d[c] if r["final_delta"] is not None]
             for c in order]
-    plt.boxplot(data, labels=[c.replace("D2_", "").replace("D1_", "")
+    plt.boxplot(data, tick_labels=[c.replace("D2_", "").replace("D1_", "")
                               for c in order])
     plt.axhline(M.EPS_EDIT, ls="--", color="red", label=f"approx-FP thr")
     plt.ylabel("final-step Δt (V_{T-1}->V_T)")
@@ -387,7 +387,7 @@ def make_figures(recs, summary):
     data = [[r["clean_min_delta"] for r in d[c]
              if r.get("clean_min_delta") is not None] for c in order]
     data = [x if x else [np.nan] for x in data]
-    plt.boxplot(data, labels=[c.replace("D2_", "").replace("D1_", "")
+    plt.boxplot(data, tick_labels=[c.replace("D2_", "").replace("D1_", "")
                               for c in order])
     plt.axhline(M.EPS_EDIT, ls="--", color="red",
                 label=f"approx-FP thr={M.EPS_EDIT}")

@@ -1,0 +1,28 @@
+\begin{table}[t]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lccccccc@{}}
+        \toprule
+        \textbf{Condition} & \textbf{mean final $\Delta$} & \textbf{clean min $\Delta^{\dagger}$} & \textbf{\% exact FP} & \textbf{\% approx FP} & \textbf{fit floor $c$} & \textbf{fit $R^2$} & \textbf{mean trunc.\ versions} \\
+        \midrule
+        \texttt{D1\_main} (two-stage)   & 0.376 & 0.340 & 0.00 & 0.00 & 0.307 & 0.61 & 3.9 \\
+        \texttt{D2\_single\_stage}      & \textbf{0.048} & \textbf{0.046} & \textbf{0.08} & \textbf{0.42} & \textbf{0.048} & \textbf{0.98} & \textbf{0.0} \\
+        \texttt{D2\_temp\_default}      & 0.601 & 0.567 & 0.00 & 0.00 & 0.455 & 0.27 & 4.2 \\
+        \texttt{D2\_cross\_model}       & 0.228 & 0.234 & 0.00 & 0.00 & 0.250 & 0.79 & 2.8 \\
+        \texttt{D2\_framing\_harsh}     & 0.451 & 0.453 & 0.00 & 0.00 & 0.324 & 0.57 & 5.2 \\
+        \texttt{D2\_framing\_lenient}   & 0.245 & 0.218 & 0.00 & 0.00 & 0.244 & 0.77 & 2.9 \\
+        \texttt{D2\_genre\_prose}       & 0.275 & 0.289 & 0.00 & 0.00 & 0.170 & 0.83 & 2.4 \\
+        \texttt{D2\_unconstrained}      & 0.399 & 0.473 & 0.00 & 0.00 & 0.384 & 0.52 & 5.4 \\
+        \bottomrule
+    \end{tabular}
+    }
+    \caption{Convergence outcomes across conditions. The approximate-fixed-point (FP) threshold
+    is $0.02$. Every two-stage condition sits an order of magnitude above it and reaches
+    \emph{zero} exact and approximate fixed points; the fit floor $c$ is large and positive
+    (relaxation toward non-zero churn). Only the single-stage baseline converges (bold): it
+    decays to $c\approx 0.05$ with $R^2=0.98$ and reaches an approximate fixed point in $42\%$
+    of documents.
+    $^{\dagger}$\emph{clean min $\Delta$} is the smallest per-step $\Delta$ over
+    truncation-free steps (robustness check).}
+    \label{tab:main_results}
+\end{table}

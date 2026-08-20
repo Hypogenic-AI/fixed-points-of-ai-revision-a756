@@ -1,17 +1,17 @@
 # Research State
 
 - Current phase: `None`
-- Pipeline completed: `False`
+- Pipeline completed: `True`
 
 ## Previous phases
 
-resource_finder (succeeded), experiment_runner (failed)
+resource_finder (succeeded), experiment_runner (succeeded)
 
 ## Current phase context
 
 - Phase: `experiment_runner`
-- Status: `failed`
-- Started: `2026-08-19T21:46:56.944409Z`
+- Status: `completed`
+- Started: `2026-08-20T01:09:23.133833Z`
 - Next steps:
   - Validate the report and experimental artifacts before finalizing.
 
@@ -24,9 +24,9 @@ resource_finder (succeeded), experiment_runner (failed)
 
 ## Output validation
 
-- Valid: `False`
+- Valid: `True`
 - Expected: `REPORT.md`
-- Missing: `REPORT.md`
+- Missing: None
 - Outside workspace: None
 
 ## Agent notes
@@ -102,6 +102,33 @@ length-inflation phenomenon vs the length-preserving default operator.
 
 **Next steps:** finish full run (all 8 conditions), run `analyze.py`
 (judge=gpt-4o), then write REPORT.md/README.md.
+
+---
+**Phase: experiment_runner — COMPLETE (2026-08-20).**
+
+All 8 conditions ran to completion (12 docs each, 10 for prose; V_0..V_8).
+`analyze.py` run to completion (fixed matplotlib `labels`->`tick_labels`; all
+LLM/embed calls cached, re-run cost $0). Artifacts on disk: `results/summary.json`,
+`results/stats.json`, `results/per_trajectory.{json,csv}`, 6 figures in `figures/`,
+`REPORT.md`, `README.md`.
+
+**Headline result (hypothesis answered = NO for two-stage loop):**
+- Two-stage review->revise does NOT converge: D1 mean final Δ=0.376, 0% exact/approx
+  FP, exp-fit floor c=0.31; t(11)=11.3 vs 0, p=2e-7. Robust to truncation control
+  (clean min Δ=0.34 >> 0.02, p=5e-8).
+- Single-stage self-refine DOES converge (final Δ=0.048, 42% approx FP, R²=0.98) —
+  replicates Wu et al. 2026. Single-vs-two-stage is the dominant effect
+  (Cohen dz=-3.26, p=5e-4). The explicit review stage causes non-convergence.
+- Mechanism: runaway length inflation (~7x chars; prose 15x) because the reviewer is
+  never satisfied; meaning preservation 10->6.2/10, cos(V0,Vfin) 0.97->0.77, yet
+  isolated quality judge flat 7.5->8.0 (self-bias signature). Length-preserving
+  instruction largely ignored (D1 vs unconstrained n.s., p=0.62).
+- Determinants: temp default worse/chaotic (dz=+2.09, R²=0.27); cross-model & lenient
+  reviewer roughly halve churn but still no FP; harsh n.s.
+
+**Known limitations documented in REPORT.md:** single provider (OpenAI, only key
+present), 2048-token cap causes late-step truncation (mitigated by clean-Δ metric),
+T=8 horizon, n=12/cond, LLM-judged fidelity. Session complete.
 <!-- NEURICO_AGENT_NOTES_END:experiment_runner -->
 
 <!-- NEURICO_AGENT_NOTES_END -->

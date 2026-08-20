@@ -1,25 +1,14 @@
 {
-  "success": false,
+  "success": true,
   "stages": {
     "resource_finder": {
       "success": true,
-      "completion_marker": "/workspaces/fixed-points-of-ai-revision-a756/.resource_finder_complete",
-      "outputs": {
-        "literature_review": "/workspaces/fixed-points-of-ai-revision-a756/literature_review.md",
-        "resources_catalog": "/workspaces/fixed-points-of-ai-revision-a756/resources.md",
-        "papers_dir": "/workspaces/fixed-points-of-ai-revision-a756/papers",
-        "datasets_dir": "/workspaces/fixed-points-of-ai-revision-a756/datasets",
-        "code_dir": "/workspaces/fixed-points-of-ai-revision-a756/code"
-      },
-      "log_file": "/workspaces/fixed-points-of-ai-revision-a756/logs/resource_finder_claude.log",
-      "transcript_file": "/workspaces/fixed-points-of-ai-revision-a756/logs/resource_finder_claude_transcript.jsonl",
-      "elapsed_time": 1047.72918343544,
-      "background_processes_terminated": false
+      "skipped": true
     },
     "experiment_runner": {
-      "success": false,
-      "return_code": 143,
-      "elapsed_time": 3600.445506334305,
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 440.28210067749023,
       "log_file": "/workspaces/fixed-points-of-ai-revision-a756/logs/execution_claude.log",
       "transcript_file": "/workspaces/fixed-points-of-ai-revision-a756/logs/execution_claude_transcript.jsonl",
       "background_processes_terminated": false

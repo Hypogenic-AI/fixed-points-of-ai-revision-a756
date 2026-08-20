@@ -1,0 +1,24 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Iterating AI \emph{review $\to$ revise} does \emph{not} reach a fixed point. The regenerated
+critique injects endless edit pressure; the document inflates $\sim 7\times$, drifts from its
+original meaning (cosine $0.97\to 0.77$), and settles into a high, non-zero churn plateau
+(mean final $\Delta\approx 0.38$) rather than a stable point, with $0\%$ of trajectories
+converging. Removing the separate review stage restores convergence to a soft fixed point
+($42\%$ approximate fixed points, $R^2=0.98$), identifying the explicit review loop---not
+iteration itself---as the cause of non-convergence. Along the way we document a concrete
+failure of isolated LLM-judges: quality scores rise while meaning preservation collapses.
+
+\para{Takeaway.} ``Keep asking an AI to review and revise until it stabilizes'' is not a
+reliable stopping strategy; if a fixed point is desired, either drop the separate review stage
+or add an explicit convergence/stop criterion.
+
+\para{Future work.} We highlight five directions: (1) a \emph{positive control for
+convergence}---give the reviewer an explicit ``return \textsc{no changes needed}'' option
+and/or the reviser a hard length budget, and test whether a fixed point reappears;
+(2) \emph{cross-provider replication} (Claude, Gemini, open-weight) to establish generality of
+the never-satisfied-reviewer mechanism; (3) a \emph{length-controlled operator} to disentangle
+churn from genuine rewriting versus churn from growth; (4) \emph{basins of attraction}---re-seed
+the same content as paraphrases and test whether trajectories share an attractor; and
+(5) \emph{human evaluation} of meaning drift to validate the LLM-judge fidelity signal.

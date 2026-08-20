@@ -1,0 +1,76 @@
+\section{Introduction}
+\label{sec:intro}
+
+Suppose we hand a document to an AI and ask it to \emph{review} the writing, then hand
+both the document and that review back and ask it to \emph{revise}, and repeat. Does the
+process ever settle? This is not an idle question: automated editing assistants, agentic
+writing pipelines, and self-improving document workflows all run some version of this loop,
+often with an implicit ``keep going until it stabilizes'' stopping rule. Whether such a loop
+\emph{terminates}---and whether its limit is a genuinely better document or a degenerate
+attractor---determines whether it is safe to run to ``stability.''
+
+\para{The loop is a dynamical system.} Following recent work that views recursive text
+generation as a map over documents~\citep{wu2026converge}, we treat a document version
+$V_t$ as a state and the two-stage operator as $V_{t+1} = F(V_t)$ with
+$F = \Revise(\cdot, \Review(\cdot))$. A \emph{fixed point} is a version the loop no longer
+changes ($V_{t+1} = V_t$), or, more realistically, a soft region where consecutive versions
+differ by a tiny, stable edit distance. The natural hypothesis---and the folk intuition
+behind ``revise until it stops changing''---is that the loop contracts toward such a fixed
+point.
+
+\para{The gap.} The closest prior work,~\citet{wu2026converge}, studies a
+\emph{single-stage} self-refine operator (revise directly, with no separate critique) and
+finds it relaxes cleanly to a soft fixed point. The canonical Self-Refine
+loop~\citep{madaan2023selfrefine} \emph{fuses} critique and revision in one prompt. Neither
+isolates the effect of a \emph{decoupled, freshly regenerated review at every step}. This
+matters because a review stage is not neutral: a reviewer is instructed to \emph{find
+weaknesses}, and a capable model can always find some. The skeptical
+literature---self-bias amplification~\citep{xu2024pride}, feedback
+friction~\citep{feedbackfriction2025}, and recursion-induced
+degradation~\citep{shumailov2023curse}---predicts recursion need not be benign, but does not
+measure the review$\to$revise fixed-point question directly.
+
+\para{Our approach.} We run the two-stage loop for $T=8$ iterations on 12 fresh 2025-era
+scientific abstracts, logging every version $V_t$ and every review $R_t$, and measure
+convergence with the exact metrics of~\citet{wu2026converge}: normalized Levenshtein edit
+distance $\dt$, exact and approximate fixed-point rates, exponential-relaxation fits, plus
+semantic drift and an LLM-as-judge of quality and meaning preservation. Crucially, we run a
+\emph{single-stage} self-refine baseline on the same documents as a positive control, and
+ablate seven factors (temperature, cross-model reviewer, review framing, genre, and length
+guidance) to find what governs convergence.
+
+\para{What we find.} The two-stage loop does \emph{not} converge. Per-step change plateaus
+at a large residual floor (mean final $\Delta \approx 0.38$, an order of magnitude above the
+$0.02$ approximate-fixed-point threshold; $t(11)=11.3$, $p=2.2\times10^{-7}$), and $0\%$ of
+trajectories reach a fixed point. The single-stage baseline, on the \emph{same} documents,
+does converge (final $\Delta \approx 0.05$, $42\%$ approximate fixed points, fit
+$R^2=0.98$)---so the harness detects convergence when it exists, and the explicit review
+stage is the decisive difference (Cohen's $d_z \approx -3.3$, the largest effect in the
+study). The mechanism is runaway growth: a never-satisfied reviewer emits fresh demands
+every round, the reviser satisfies them by \emph{adding} text, documents inflate $\sim 7\times$
+(a 1.5\,KB abstract becomes a 10\,KB mini-paper), drift from the original (cosine
+$0.97\to0.77$), and lose fidelity ($\sim 4$ fabricated claims per document)---while
+isolated-quality judge scores barely move ($7.5\to 8.0$), so the loop looks locally like
+improvement while globally diverging.
+
+\para{Contributions.}
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We formalize and directly test the decoupled review$\to$revise loop as a
+    dynamical system, and show it does \emph{not} reach a fixed point: mean final
+    $\Delta \approx 0.38$ and $0\%$ convergence across all two-stage conditions
+    (\secref{sec:results}).
+    \item We identify the explicit review stage as the cause via a same-document single-stage
+    positive control that \emph{does} converge ($42\%$ approximate fixed points,
+    $R^2=0.98$), the dominant effect in a seven-way ablation ($d_z\approx-3.3$).
+    \item We characterize the failure mechanism---never-satisfied-reviewer-driven length
+    inflation ($\sim 7\times$) that trades meaning preservation ($10\to 6.2$) for flat,
+    slightly-rising isolated quality scores---and show it is not a truncation artifact.
+    \item We draw a practical implication: ``run until it stabilizes'' is unsafe for
+    review$\to$revise loops; a fixed point requires either dropping the review stage or
+    adding an explicit stop criterion.
+\end{itemize}
+
+The rest of the paper reviews related work (\secref{sec:related}), formalizes the operator
+and setup (\secref{sec:method}), presents results and ablations (\secref{sec:results}),
+discusses interpretation and limitations (\secref{sec:discussion}), and concludes
+(\secref{sec:conclusion}).
